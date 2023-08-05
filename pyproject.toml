@@ -8,6 +8,7 @@ packages = [{include = "hexlet_code"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+django-bootstrap5 = "^23.3"
 
 
 [build-system]
