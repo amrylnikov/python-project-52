@@ -1,7 +1,31 @@
 {% extends "index.html" %}
 
 {% block content %}
-    <h1>О блоге</h1>
-    <p>Эксперименты с Django на Хекслете</p>
-{% endblock %}
+<h1 class="my-4">Пользователи</h1>
+    
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Имя пользователя</th>
+        <th>Полное имя</th>
+        <th>Дата создания</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>1</td>
+          <td>marganezz</td>
+          <td>Николай Земелько</td>
+          <td>27.07.2023 12:10</td>
+          <td>
+            <a href="https://python-task-manager-ru.hexlet.app/users/1/update/">Изменить</a>
+            <br>
+            <a href="https://python-task-manager-ru.hexlet.app/users/1/delete/">Удалить</a>
+          </td>
+        </tr>
+    </tbody>
+</table>
+  {% endblock %}
 

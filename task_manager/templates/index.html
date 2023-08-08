@@ -60,32 +60,52 @@
       <div class="collapse navbar-collapse" id="navbarToggleExternalContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="https://python-task-manager-ru.hexlet.app/users/">Пользователи</a>
+            <a class="nav-link" href="{% url 'users' %}">Пользователи</a>
           </li>
-            <li class="nav-item">
-              <a class="nav-link" href="https://python-task-manager-ru.hexlet.app/statuses/">Статусы</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="https://python-task-manager-ru.hexlet.app/labels/">Метки</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="https://python-task-manager-ru.hexlet.app/tasks/">Задачи</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'login' %}">Вход</a>
-            </li>
-        </ul>
-        <ul class="navbar-nav">
-            <form action="https://python-task-manager-ru.hexlet.app/logout/" method="post">
-              <input type="hidden" name="csrfmiddlewaretoken" value="XIvXpqQKYLyiRratlsl0IboqTx4LjypyLEYSFOvLhn4KAnOnXQAtha9T0nJJCJmC">
-              <input class="btn nav-link" type="submit" value="Выход">
-            </form>
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="https://python-task-manager-ru.hexlet.app/statuses/">Статусы</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://python-task-manager-ru.hexlet.app/labels/">Метки</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://python-task-manager-ru.hexlet.app/tasks/">Задачи</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Выход</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Вход</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'registration' %}">Регистрация</a>
+          </li>          
+          {% endif %}
         </ul>
       </div>
     </nav>
-
-    {% block content %}
     <div class="container wrapper flex-grow-1">
+    {% block content %}
+      {% if messages %}
+        {%for message in messages %}
+          {% if message.tags%}
+            {% if message.tag == success %}
+              <div class="alert alert-info alert-dismissible fade show" role="alert">
+            {% elif message.tag == error %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {% else %}
+              <div class="alert alert-info alert-dismissible fade show" role="alert">
+            {% endif %}
+          {% else %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+          {% endif %}
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
       <h1 class="my-4"> 
       </h1>
       <h1 class="my-4"></h1>
@@ -97,9 +117,8 @@
           <a class="btn btn-primary btn-lg" href="https://ru.hexlet.io/">Узнать больше</a>
         </div>
       </div>
-    </div>
     {% endblock %}
-
+    </div>
     <footer>
       <div class="container my-5 pt-4 border-top">
         <a target="_blank" href="https://ru.hexlet.io/">Hexlet</a>
