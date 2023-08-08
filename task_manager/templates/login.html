@@ -6,16 +6,19 @@
     <form method="post">
         {%csrf_token %}
         {% if messages %}
-        <ul class="list-unstyled text-danger">
-            <li>
-                {%for message in messages %}
-                    {% if message.tag == error%}
-                        <h1> It is working! </h1>
+            {%for message in messages %}
+                {% if message.tag == error%}
+                <ul class="list-unstyled text-danger">
+                    <li>
                         {{ message }}
-                    {% endif %}
-                {% endfor %}
-            </li>
-        </ul>
+                    </li>
+                </ul>
+                {% else %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                </div>
+                {% endif %}
+            {% endfor %}
         {% endif %}
         <div class="mb-3">
             <label class="form-label" for="id_username">Имя пользователя</label>

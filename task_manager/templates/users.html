@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 
 {% block content %}
-<h1 class="my-4">Пользователи</h1>
+<h1 class="my-4"> Пользователи</h1>
     
 <table class="table table-striped">
     <thead>
@@ -14,17 +14,19 @@
       </tr>
     </thead>
     <tbody>
+        {% for user in users %}
         <tr>
-          <td>1</td>
-          <td>marganezz</td>
-          <td>Николай Земелько</td>
-          <td>27.07.2023 12:10</td>
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.first_name }} {{ user.last_name }}</td>
+          <td>{{ user.date_joined|date:'d.m.Y H:i' }}</td>
           <td>
-            <a href="https://python-task-manager-ru.hexlet.app/users/1/update/">Изменить</a>
+            <a href="{% url 'edit' user.id %}">Изменить</a>
             <br>
-            <a href="https://python-task-manager-ru.hexlet.app/users/1/delete/">Удалить</a>
+            <a href="{% url 'delete' user.id %}">>Удалить</a>
           </td>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
   {% endblock %}
