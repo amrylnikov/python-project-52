@@ -1,12 +1,20 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.views import View
 
 from task_manager.users.forms import RegisterUserForm
 
 
-def register_user(request):
-    if request.method == "POST":
+class RegisterUser(View):
+
+    def get(self, request, *args, **kwargs):
+        form = RegisterUserForm()
+        return render(request, 'registration.html', {
+            'form': form,
+        })
+
+    def post(self, request, *args, **kwargs):
         form = RegisterUserForm(request.POST)
         if form.is_valid():
             form.save()
@@ -16,30 +24,20 @@ def register_user(request):
         return render(request, 'registration.html', {
             'form': form,
         })
-    else:
-        form = RegisterUserForm()
-        return render(request, 'registration.html', {
-            'form': form,
+
+
+class ShowUsers(View):
+
+    def get(self, request, *args, **kwargs):
+        users = User.objects.all()
+        return render(request, 'users.html', {
+            'users': users,
         })
 
 
-def show_users(request):
-    users = User.objects.all()
-    return render(request, 'users.html', {
-        'users': users,
-    })
+class EditUser(View):
 
-
-def edit_user(request, *args, **kwargs):
-    if request.method == "POST":
-        user_id = kwargs.get('id')
-        user = User.objects.get(id=user_id)
-        form = RegisterUserForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            messages.add_message(request, messages.INFO, 'Пользователь обновлен!')
-            return redirect('articles')
-    else:
+    def get(self, request, *args, **kwargs):
         user_id = kwargs.get('id')
         user = User.objects.get(id=user_id)
         print('user', user)
@@ -47,10 +45,21 @@ def edit_user(request, *args, **kwargs):
         print('form', form)
         return render(request, 'edit.html', {'form': form, 'user_id': user_id})
 
+    def post(self, request, *args, **kwargs):
+        user_id = kwargs.get('id')
+        user = User.objects.get(id=user_id)
+        form = RegisterUserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.INFO, 'Пользователь обновлен!')
+            return redirect('articles')
 
-def delete_user(request, *args, **kwargs):
-    user_id = kwargs.get('id')
-    user = User.objects.get(id=user_id)
-    if user:
-        user.delete()
-    return redirect('users')
+
+class DeleteUser(View):
+    # TODO реализовать страницу удаления пользователя?
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get('id')
+        user = User.objects.get(id=user_id)
+        if user:
+            user.delete()
+        return redirect('users')
