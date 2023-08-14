@@ -73,7 +73,10 @@
             <a class="nav-link" href="https://python-task-manager-ru.hexlet.app/tasks/">Задачи</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Выход</a>
+            <form id="logout-form" action="{% url 'logout' %}" method="POST">
+              {% csrf_token %}
+              <a class="nav-link" onclick="document.getElementById('logout-form').submit();" style="cursor: pointer;">Выход</a>
+            </form>
           </li>
           {% else %}
           <li class="nav-item">
