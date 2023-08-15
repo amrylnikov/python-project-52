@@ -10,7 +10,7 @@ class IndexView(View):
         return render(request, 'index.html')
 
 
-class LoginUser(View):
+class UserLogin(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'login.html')
@@ -21,7 +21,7 @@ class LoginUser(View):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, ('Вы залогинены'))
+            messages.success(request, ("Вы залогинены"))
             return redirect('index')
         else:
             messages.error(request, ('''Пожалуйста, введите правильные имя
@@ -30,9 +30,9 @@ class LoginUser(View):
             return redirect('login')
 
 
-class LogoutUser(View):
+class UserLogout(View):
 
     def post(self, request, *args, **kwargs):
         logout(request)
-        messages.success(request, ('Вы разлогинены'))
+        messages.info(request, ("Вы разлогинены"))
         return redirect('index')
