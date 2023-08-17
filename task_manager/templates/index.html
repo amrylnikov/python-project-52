@@ -21,7 +21,7 @@
           </li>
           {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="https://python-task-manager-ru.hexlet.app/statuses/">Статусы</a>
+            <a class="nav-link" href="{% url 'statuses' %}">Статусы</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="https://python-task-manager-ru.hexlet.app/labels/">Метки</a>
@@ -50,24 +50,6 @@
     
     {% block show_messages %}
     {% bootstrap_messages %}
-      <!-- {% if messages %}
-        {%for message in messages %}
-          {% if message.tags%}
-            {% if 'success' in message.tags %}
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {% elif 'error' in message.tags %}
-              <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {% elif 'warning' in message.tags %}
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {% else %}
-              <div class="alert alert-info alert-dismissible fade show" role="alert">
-            {% endif %}
-          {% endif %}
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      {% endif %} -->
     {% endblock %}
     
     {% block content %}

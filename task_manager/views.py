@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 
 
@@ -30,7 +31,14 @@ class UserLogin(View):
             return redirect('login')
 
 
-class UserLogout(View):
+class UserLogout(LoginRequiredMixin, View):
+    login_url = 'login'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request,
+                           'Вы не авторизованы! Пожалуйста, выполните вход.')
+        return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         logout(request)
