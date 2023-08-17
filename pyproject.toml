@@ -4,11 +4,12 @@ version = "0.1.0"
 description = ""
 authors = ["amrylnikov <amrylnikov@gmail.com>"]
 readme = "README.md"
-packages = [{include = "hexlet_code"}, {include = "task_manager"}]
+packages = [{include = "task_manager"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 django-bootstrap5 = "^23.3"
+
 
 
 [build-system]
