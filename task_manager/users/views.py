@@ -1,32 +1,29 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic.edit import DeleteView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from task_manager.users.forms import RegisterUserForm
 
 
-class UserRegister(View):
+# переделать базовые view на шаблонные с помощью миксинов
+class UserRegister(SuccessMessageMixin, CreateView):
+    form_class = RegisterUserForm
+    template_name = 'registration.html'
+    success_url = reverse_lazy('login')
+    success_message = "Пользователь успешно зарегистрирован"
 
-    def get(self, request, *args, **kwargs):
-        form = RegisterUserForm()
-        return render(request, 'registration.html', {
-            'form': form,
-        })
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        return response
 
-    def post(self, request, *args, **kwargs):
-        form = RegisterUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, ("Пользователь успешно зарегистрирован"))
-            return redirect('login')
-        messages.error(request, (form.errors))
-        return render(request, 'registration.html', {
-            'form': form,
-        })
+    # Для ошибок пароля. Удалить при проверке
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return super().form_invalid(form)
 
 
 class UsersShow(View):
@@ -42,7 +39,7 @@ class UserEdit(SuccessMessageMixin, UpdateView):
     model = User
     template_name = 'edit.html'
     form_class = RegisterUserForm
-    success_message = "Пользователь обновлен!"
+    success_message = "Пользователь успешно изменен!"
 
     def get_success_url(self):
         return reverse('users')
@@ -52,7 +49,7 @@ class UserDelete(SuccessMessageMixin, DeleteView):
     model = User
     template_name = 'auth/user_confirm_delete.html'
     success_url = reverse_lazy('users')
-    success_message = "Пользователь удалён!"
+    success_message = "Пользователь успешно удалён!"
 
     def form_valid(self, request, *args, **kwargs):
         self.object = self.get_object()
