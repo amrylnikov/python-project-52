@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h1 class="my-4">Создать задачу</h1>  
+<form method="post">
+  {%csrf_token %}
+  <table>
+  {{ form }}
+  </table>
+  <button type="submit">Изменить</button>
+</form>
+{% endblock %}

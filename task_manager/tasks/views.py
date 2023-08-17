@@ -6,30 +6,17 @@ from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from task_manager.statuses.forms import CreateStatusForm
-from task_manager.statuses.models import Status
+from task_manager.tasks.forms import CreateTaskForm
+from task_manager.tasks.models import Task
 
 
-class StatusCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    login_url = 'login'
+class IndexView(View):
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
-
-    form_class = CreateStatusForm
-    template_name = 'statuses/create.html'
-    success_url = reverse_lazy('statuses')
-    success_message = "Статус успешно создан"
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        return response
+    def get(self, request, *args, **kwargs):
+        return render(request, 'index.html')
 
 
-class StatusShow(LoginRequiredMixin, View):
+class TaskGetInfo(LoginRequiredMixin, View):
     login_url = 'login'
 
     def dispatch(self, request, *args, **kwargs):
@@ -39,14 +26,50 @@ class StatusShow(LoginRequiredMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        statuses = Status.objects.all()
-        return render(request, 'statuses/statuses.html', {
-            'statuses': statuses,
+        task_id = kwargs.get('pk')
+        print('task_id', task_id)
+        task = Task.objects.get(id=task_id)
+        print('task', task)
+        form = CreateTaskForm(instance=task)
+        return render(request, 'tasks/task.html', {'form': form, 'task': task})
+
+
+class TaskCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    login_url = 'login'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request,
+                           'Вы не авторизованы! Пожалуйста, выполните вход.')
+        return super().dispatch(request, *args, **kwargs)
+
+    form_class = CreateTaskForm
+    template_name = 'tasks/create.html'
+    success_url = reverse_lazy('tasks')
+    success_message = "Задачи успешно создана!"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        return response
+
+
+class TaskShow(LoginRequiredMixin, View):
+    login_url = 'login'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request,
+                           'Вы не авторизованы! Пожалуйста, выполните вход.')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        tasks = Task.objects.all()
+        return render(request, 'tasks/tasks.html', {
+            'tasks': tasks,
         })
 
 
-# html форма кривая
-class StatusEdit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class TaskEdit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     login_url = 'login'
 
     def dispatch(self, request, *args, **kwargs):
@@ -55,16 +78,16 @@ class StatusEdit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                            'Вы не авторизованы! Пожалуйста, выполните вход.')
         return super().dispatch(request, *args, **kwargs)
 
-    model = Status
+    model = Task
     template_name = 'edit.html'
-    form_class = CreateStatusForm
-    success_message = "Статус успешно обновлен!"
+    form_class = CreateTaskForm
+    success_message = "Задача успешно обновлена!"
 
     def get_success_url(self):
-        return reverse('statuses')
+        return reverse('tasks')
 
 
-class StatusDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class TaskDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     login_url = 'login'
 
     def dispatch(self, request, *args, **kwargs):
@@ -73,12 +96,16 @@ class StatusDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
                            'Вы не авторизованы! Пожалуйста, выполните вход.')
         return super().dispatch(request, *args, **kwargs)
 
-    model = Status
-    template_name = 'auth/status_confirm_delete.html'
-    success_url = reverse_lazy('statuses')
+    model = Task
+    template_name = 'auth/task_confirm_delete.html'
+    success_url = reverse_lazy('tasks')
 
     def form_valid(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
-        messages.success(self.request, "Статус успешно удалён!")
+        messages.success(self.request, "Задача успешно удалёна!")
         return redirect(self.success_url)
+
+# Удалять задачи может их создатель
+#  Нельзя удалить юзера у которого есть задачи
+# Добавить индивидуальную задачу
