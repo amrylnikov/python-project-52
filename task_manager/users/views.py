@@ -10,7 +10,6 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from task_manager.users.forms import RegisterUserForm
 
 
-# переделать базовые view на шаблонные с помощью миксинов
 class UserRegister(SuccessMessageMixin, CreateView):
     form_class = RegisterUserForm
     template_name = 'registration.html'
@@ -77,4 +76,4 @@ class UserDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
 # TODO Проверить в html что на нужных страницах проверяется, залогиген ли юзер
 # (если ты в браузере ссылку на изменение вобьёшь например)
 # А как? Надо ж редирект делать, но проверить я могу только в html i guess?
-# Нельзя удалить пользователя если он связан с задачами
+# Нельзя удалить пользователя если он связан с задачами. И метки тжс. Как?

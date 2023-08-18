@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from task_manager.tasks.forms import CreateTaskForm
 from task_manager.tasks.models import Task
+from task_manager.tasks.filters import TaskFilter
 
 
 class IndexView(View):
@@ -63,9 +64,11 @@ class TaskShow(LoginRequiredMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        tasks = Task.objects.all()
+        task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
+        # tasks = Task.objects.all()
         return render(request, 'tasks/tasks.html', {
-            'tasks': tasks,
+            'form': task_filter.form,
+            'tasks': task_filter.qs,
         })
 
 
@@ -107,5 +110,5 @@ class TaskDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return redirect(self.success_url)
 
 # Удалять задачи может их создатель
-#  Нельзя удалить юзера у которого есть задачи
+# Нельзя удалить юзера у которого есть задачи
 # Добавить индивидуальную задачу
