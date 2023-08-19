@@ -1,13 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from task_manager.users.forms import RegisterUserForm
+from task_manager.mixins import CustomLoginRequiredMixin
 
 
 class UserRegister(SuccessMessageMixin, CreateView):
@@ -35,15 +35,7 @@ class UsersShow(View):
         })
 
 
-class UserEdit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    login_url = 'login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
-
+class UserEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = User
     template_name = 'edit.html'
     form_class = RegisterUserForm
@@ -53,15 +45,7 @@ class UserEdit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return reverse('users')
 
 
-class UserDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    login_url = 'login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
-
+class UserDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = User
     template_name = 'auth/user_confirm_delete.html'
     success_url = reverse_lazy('users')
@@ -77,3 +61,4 @@ class UserDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
 # (если ты в браузере ссылку на изменение вобьёшь например)
 # А как? Надо ж редирект делать, но проверить я могу только в html i guess?
 # Нельзя удалить пользователя если он связан с задачами. И метки тжс. Как?
+# TODO Как обработать ошибку, что возникает при попытке удаления?

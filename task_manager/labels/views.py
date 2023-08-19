@@ -4,21 +4,13 @@ from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from task_manager.labels.forms import CreateLabelForm
 from task_manager.labels.models import Label
+from task_manager.mixins import CustomLoginRequiredMixin
 
 
-class LabelCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    login_url = 'login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
-
+class LabelCreate(CustomLoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = CreateLabelForm
     template_name = 'labels/create.html'
     success_url = reverse_lazy('labels')
@@ -29,14 +21,7 @@ class LabelCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return response
 
 
-class LabelShow(LoginRequiredMixin, View):
-    login_url = 'login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
+class LabelShow(CustomLoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         labels = Label.objects.all()
@@ -45,15 +30,7 @@ class LabelShow(LoginRequiredMixin, View):
         })
 
 
-class LabelEdit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    login_url = 'login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
-
+class LabelEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Label
     template_name = 'edit.html'
     form_class = CreateLabelForm
@@ -63,15 +40,7 @@ class LabelEdit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return reverse('labels')
 
 
-class LabelDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    login_url = 'login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
-
+class LabelDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Label
     template_name = 'auth/label_confirm_delete.html'
     success_url = reverse_lazy('labels')

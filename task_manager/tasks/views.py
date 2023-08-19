@@ -4,11 +4,11 @@ from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from task_manager.tasks.forms import CreateTaskForm
 from task_manager.tasks.models import Task
 from task_manager.tasks.filters import TaskFilter
+from task_manager.mixins import CustomLoginRequiredMixin
 
 
 class IndexView(View):
@@ -17,14 +17,7 @@ class IndexView(View):
         return render(request, 'index.html')
 
 
-class TaskGetInfo(LoginRequiredMixin, View):
-    login_url = 'login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
+class TaskGetInfo(CustomLoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         task_id = kwargs.get('pk')
@@ -35,15 +28,7 @@ class TaskGetInfo(LoginRequiredMixin, View):
         return render(request, 'tasks/task.html', {'form': form, 'task': task})
 
 
-class TaskCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    login_url = 'login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
-
+class TaskCreate(CustomLoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = CreateTaskForm
     template_name = 'tasks/create.html'
     success_url = reverse_lazy('tasks')
@@ -54,14 +39,7 @@ class TaskCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return response
 
 
-class TaskShow(LoginRequiredMixin, View):
-    login_url = 'login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
+class TaskShow(CustomLoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
@@ -72,15 +50,7 @@ class TaskShow(LoginRequiredMixin, View):
         })
 
 
-class TaskEdit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    login_url = 'login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
-
+class TaskEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Task
     template_name = 'edit.html'
     form_class = CreateTaskForm
@@ -90,15 +60,7 @@ class TaskEdit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return reverse('tasks')
 
 
-class TaskDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    login_url = 'login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
-        return super().dispatch(request, *args, **kwargs)
-
+class TaskDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Task
     template_name = 'auth/task_confirm_delete.html'
     success_url = reverse_lazy('tasks')
@@ -110,5 +72,4 @@ class TaskDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return redirect(self.success_url)
 
 # Удалять задачи может их создатель
-# Нельзя удалить юзера у которого есть задачи
 # Добавить индивидуальную задачу
