@@ -21,9 +21,9 @@ class UserRegister(SuccessMessageMixin, CreateView):
         return response
 
     # Для ошибок пароля. Удалить при проверке
-    def form_invalid(self, form):
-        messages.error(self.request, form.errors)
-        return super().form_invalid(form)
+    # def form_invalid(self, form):
+    #     messages.error(self.request, form.errors)
+    #     return super().form_invalid(form)
 
 
 class UsersShow(View):
