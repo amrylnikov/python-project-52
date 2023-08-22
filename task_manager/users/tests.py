@@ -43,7 +43,7 @@ class UserRegisterTest(TestCase):
 
         response = self.client.get(self.edit_url)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(response, 'edit.html')
 
         new_form_data = {
@@ -69,7 +69,7 @@ class UserRegisterTest(TestCase):
 
         response = self.client.get(self.delete_url)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(response, 'auth/user_confirm_delete.html')
 
         response = self.client.post(self.delete_url)
