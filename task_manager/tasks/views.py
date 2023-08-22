@@ -43,10 +43,14 @@ class TaskShow(CustomLoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
-        # tasks = Task.objects.all()
+        tasks = task_filter.qs
+
+        if request.GET.get('self_tasks'):
+            tasks = task_filter.qs.filter(author=request.user)
+
         return render(request, 'tasks/tasks.html', {
             'form': task_filter.form,
-            'tasks': task_filter.qs,
+            'tasks': tasks,
         })
 
 
