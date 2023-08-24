@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 
@@ -11,24 +13,22 @@ class IndexView(View):
         return render(request, 'index.html')
 
 
-class UserLogin(View):
+class UserLogin(LoginView):
+    template_name = 'login.html'
 
-    def get(self, request, *args, **kwargs):
-        return render(request, 'login.html')
+    def get_success_url(self):
+        return reverse_lazy('index')
 
-    def post(self, request, *args, **kwargs):
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            messages.success(request, ("Вы залогинены"))
-            return redirect('index')
-        else:
-            messages.error(request, ('''Пожалуйста, введите правильные имя
-                                       пользователя и пароль. Оба поля могут
-                                       быть чувствительны к регистру.'''))
-            return redirect('login')
+    def form_valid(self, form):
+        login(self.request, form.get_user())
+        messages.success(self.request, "Вы залогинены")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '''Пожалуйста, введите правильные имя
+                                        пользователя и пароль. Оба поля могут
+                                        быть чувствительны к регистру.''')
+        return super().form_invalid(form)
 
 
 class UserLogout(LoginRequiredMixin, View):
