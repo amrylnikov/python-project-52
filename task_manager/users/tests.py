@@ -44,7 +44,7 @@ class UserRegisterTest(TestCase):
         response = self.client.get(self.edit_url)
 
         self.assertEqual(response.status_code, 302)
-        self.assertTemplateUsed(response, 'edit.html')
+        self.assertTemplateUsed(response, 'user_update.html')
 
         new_form_data = {
             'username': 'Updated',

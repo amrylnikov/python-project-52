@@ -8,8 +8,8 @@ from task_manager.labels.models import Label
 
 
 class CreateTaskForm(forms.ModelForm):
-    name = forms.CharField(max_length=255)
-    description = forms.CharField(max_length=255)
+    name = forms.CharField(max_length=255, label="Имя")
+    description = forms.CharField(max_length=255, label="Описание")
     status = forms.ModelChoiceField(queryset=Status.objects.all())
     author = forms.ModelChoiceField(queryset=User.objects.all())
     worker = forms.ModelChoiceField(queryset=User.objects.all())

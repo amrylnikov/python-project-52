@@ -10,6 +10,7 @@ packages = [{include = "task_manager"}]
 python = "^3.10"
 django-bootstrap5 = "^23.3"
 django-filter = "^23.2"
+django-bootstrap-v5 = "^1.0.11"
 
 
 
