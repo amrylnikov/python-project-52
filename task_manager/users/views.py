@@ -53,7 +53,7 @@ class UserDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     def form_valid(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
-        messages.success(self.request, "Пользователь успешно удалён")
+        messages.success(self.request, "Пользователь успешно удален")
         return redirect(self.success_url)
 
 # TODO В логине исправить сообщения в html, щас там только опасности.
