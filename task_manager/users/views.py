@@ -37,7 +37,7 @@ class UsersShow(View):
 
 class UserEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = User
-    template_name = 'edit.html'
+    template_name = 'user_update.html'
     form_class = RegisterUserForm
     success_message = "Пользователь успешно изменен!"
 
