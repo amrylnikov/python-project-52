@@ -32,7 +32,7 @@ class LabelShow(CustomLoginRequiredMixin, View):
 
 class LabelEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Label
-    template_name = 'edit.html'
+    template_name = 'labels/edit.html'
     form_class = CreateLabelForm
     success_message = "Метка успешно изменена"
 
