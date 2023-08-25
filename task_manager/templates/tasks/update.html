@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container wrapper flex-grow-1">
+  <h1 class="my-4">Изменение задачи</h1>
+  <form method="post">
+    {%csrf_token %}
+    <div class="mb-3">
+      <label class="form-label" for="id_name">Имя</label>
+      <input type="text" name="name" value="{{ form.name.value }}" maxlength="150" class="form-control" placeholder="Имя" required="" id="id_name">
+    </div>    
+    <div class="mb-3">
+      <label class="form-label" for="id_description">Описание</label>
+      <textarea name="description" cols="40" rows="10" class="form-control" placeholder="Описание" id="id_description">{{ form.description.value }}</textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_status">Статус</label>
+      {{ form.status }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_executor">Исполнитель</label>
+      {{ form.worker }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="id_labels">Метки</label>
+      {{ form.labels }}
+    </div>
+    <input class="btn btn-primary" type="submit" value="Изменить">
+  </form>
+</div>
+{% endblock %}

@@ -56,7 +56,7 @@ class TaskShow(CustomLoginRequiredMixin, View):
 
 class TaskEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Task
-    template_name = 'edit.html'
+    template_name = 'tasks/update.html'
     form_class = CreateTaskForm
     success_message = "Задача успешно обновлена!"
 
@@ -72,7 +72,7 @@ class TaskDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     def form_valid(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
-        messages.success(self.request, "Задача успешно удалёна!")
+        messages.success(self.request, "Задача успешно удалена")
         return redirect(self.success_url)
 
 # Удалять задачи может их создатель
