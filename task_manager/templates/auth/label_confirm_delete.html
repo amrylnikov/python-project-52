@@ -1,11 +1,10 @@
 {% extends 'index.html' %}
 
-{% block show_messages %}{% endblock %}
 {% block content %}
   <h1>Удалить Метку?</h1>
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Удалить</button>
+    <input class="btn btn-danger" type="submit" value="Да, удалить">
     <a href="{% url 'labels' %}" class="btn btn-secondary">Отмена</a>
   </form>
 {% endblock %}

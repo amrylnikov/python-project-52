@@ -34,7 +34,7 @@ class LabelEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Label
     template_name = 'edit.html'
     form_class = CreateLabelForm
-    success_message = "Метка успешно обновлена!"
+    success_message = "Метка успешно изменена"
 
     def get_success_url(self):
         return reverse('labels')
@@ -48,5 +48,5 @@ class LabelDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     def form_valid(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
-        messages.success(self.request, "Метка успешно удалёна!")
+        messages.success(self.request, "Метка успешно удалена")
         return redirect(self.success_url)

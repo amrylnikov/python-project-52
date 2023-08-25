@@ -48,5 +48,5 @@ class StatusDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     def form_valid(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
-        messages.success(self.request, "Статус успешно удалён!")
+        messages.success(self.request, "Статус успешно удален")
         return redirect(self.success_url)
