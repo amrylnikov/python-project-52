@@ -30,12 +30,11 @@ class StatusShow(CustomLoginRequiredMixin, View):
         })
 
 
-# html форма кривая
 class StatusEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Status
-    template_name = 'edit.html'
+    template_name = 'statuses/update.html'
     form_class = CreateStatusForm
-    success_message = "Статус успешно обновлен!"
+    success_message = "Статус успешно изменен"
 
     def get_success_url(self):
         return reverse('statuses')
