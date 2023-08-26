@@ -11,7 +11,7 @@ class TaskFilter(django_filters.FilterSet):
     # author = django_filters.BooleanFilter
     status = django_filters.ModelChoiceFilter(queryset=Status.objects.all(), label='Статус')
     executor = django_filters.ModelChoiceFilter(queryset=User.objects.all(), label='Исполнитель')
-    labels = django_filters.ModelMultipleChoiceFilter(queryset=Label.objects.all(), label='Метки')
+    labels = django_filters.ModelMultipleChoiceFilter(queryset=Label.objects.all(), label='Метка')
 
     class Meta:
         model = Task
