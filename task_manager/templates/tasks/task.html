@@ -27,25 +27,11 @@
             <div class="col">Дата создания</div>
             <div class="col">{{ task.date_joined }}</div>
           </div>
-          <!-- <div class="row p-1">
-            <div class="col">
-              <h6>Метки:</h6>
-              <ul>
-                
-                  <li>фвфы</li>
-                
-                  <li>ad!11</li>
-                
-                  <li>Аргентина Манит Негра</li>
-                
-              </ul>
-            </div>
-          </div> -->
           <div class="row p-1">
             <div class="col">
-              <a href="https://python-task-manager-ru.hexlet.app/tasks/5/update/">Изменить</a>
+              <a href="{% url 'edit_task' task.pk %}">Изменить</a>
               <br>
-              <a href="https://python-task-manager-ru.hexlet.app/tasks/5/delete/">Удалить</a>
+              <a href="{% url 'delete_task' task.pk %}">Удалить</a>
             </div>
           </div>
         </div>

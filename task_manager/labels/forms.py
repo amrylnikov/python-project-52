@@ -4,7 +4,7 @@ from task_manager.labels.models import Label
 
 
 class CreateLabelForm(forms.ModelForm):
-    name = forms.CharField(max_length=100, required=True)
+    name = forms.CharField(max_length=100, required=True, label='Имя')
 
     class Meta:
         model = Label
