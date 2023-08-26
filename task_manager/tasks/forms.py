@@ -11,8 +11,8 @@ class CreateTaskForm(forms.ModelForm):
     name = forms.CharField(max_length=255, label='Имя')
     description = forms.CharField(max_length=255, label='Описание')
     status = forms.ModelChoiceField(queryset=Status.objects.all(), label='Статус')
-    executor = forms.ModelChoiceField(queryset=User.objects.all(), label='Исполнитель')
-    labels = forms.ModelMultipleChoiceField(queryset=Label.objects.all(), label='Метки')
+    executor = forms.ModelChoiceField(queryset=User.objects.all(), label='Исполнитель', required=False)
+    labels = forms.ModelMultipleChoiceField(queryset=Label.objects.all(), label='Метки', required=False)
     date_joined = DateTimeField(auto_now_add=True)
 
     class Meta:
