@@ -9,7 +9,7 @@ from task_manager.labels.models import Label
 
 class CreateTaskForm(forms.ModelForm):
     name = forms.CharField(max_length=255, label='Имя')
-    description = forms.CharField(max_length=255, label='Описание')
+    description = forms.CharField(max_length=255, label='Описание', required=False)
     status = forms.ModelChoiceField(queryset=Status.objects.all(), label='Статус')
     executor = forms.ModelChoiceField(queryset=User.objects.all(), label='Исполнитель', required=False)
     labels = forms.ModelMultipleChoiceField(queryset=Label.objects.all(), label='Метки', required=False)
