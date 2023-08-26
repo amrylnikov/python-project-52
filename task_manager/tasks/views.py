@@ -21,9 +21,7 @@ class TaskGetInfo(CustomLoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         task_id = kwargs.get('pk')
-        print('task_id', task_id)
         task = Task.objects.get(id=task_id)
-        print('task', task)
         form = CreateTaskForm(instance=task)
         return render(request, 'tasks/task.html', {'form': form, 'task': task})
 

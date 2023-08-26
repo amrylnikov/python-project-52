@@ -22,6 +22,8 @@ class CreateTaskForm(forms.ModelForm):
     def get_executor_label(self, user):
         return f'{user.first_name} {user.last_name}'
 
+    # User.__str__ = lambda self: f'{self.first_name} {self.last_name}'
+
     class Meta:
         model = Task
         fields = ['name', 'description', 'status', 'executor', 'labels']
