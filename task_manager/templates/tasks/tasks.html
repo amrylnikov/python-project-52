@@ -32,7 +32,7 @@
           </td>
           <td>{{ task.status }}</td>
           <td>{{ task.author }}</td>
-          <td>{{ task.worker }}</td>
+          <td>{{ task.executor }}</td>
           <td>{{ task.date_joined|date:'d.m.Y H:i' }}</td>
           <td>
             <a href="{% url 'edit_task' task.pk %}">Изменить</a>

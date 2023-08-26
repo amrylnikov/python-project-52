@@ -15,14 +15,7 @@ class CreateTaskForm(forms.ModelForm):
     labels = forms.ModelMultipleChoiceField(queryset=Label.objects.all(), label='Метки', required=False)
     date_joined = DateTimeField(auto_now_add=True)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['executor'].label_from_instance = self.get_executor_label
-
-    def get_executor_label(self, user):
-        return f'{user.first_name} {user.last_name}'
-
-    # User.__str__ = lambda self: f'{self.first_name} {self.last_name}'
+    User.__str__ = lambda self: f'{self.first_name} {self.last_name}'
 
     class Meta:
         model = Task
