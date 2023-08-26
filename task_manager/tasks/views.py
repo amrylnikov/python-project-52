@@ -57,7 +57,7 @@ class TaskEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Task
     template_name = 'tasks/update.html'
     form_class = CreateTaskForm
-    success_message = "Задача успешно обновлена!"
+    success_message = "Задача успешно изменена"
 
     def get_success_url(self):
         return reverse('tasks')
