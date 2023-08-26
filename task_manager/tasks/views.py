@@ -75,4 +75,3 @@ class TaskDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
         return redirect(self.success_url)
 
 # Удалять задачи может их создатель
-# Добавить индивидуальную задачу

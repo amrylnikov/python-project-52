@@ -25,7 +25,6 @@ class UserRegisterTest(TestCase):
         # в логине и регистрации отдельно
         # self.client.login(username="fred", password="secret")
 
-
     def test_registration(self):
         response = self.client.post(self.register_url, self.form_data)
 
@@ -49,7 +48,7 @@ class UserRegisterTest(TestCase):
 
         response = self.client.get(self.edit_url)
 
-        self.assertEqual(response.status_code, 200)  # редирект не вернёт шаблон
+        self.assertEqual(response.status_code, 200)  # редиректне вернёт шаблон
         self.assertTemplateUsed(response, 'user_update.html')
 
         new_form_data = {

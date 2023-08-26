@@ -11,11 +11,19 @@ class CreateTaskForm(forms.ModelForm):
     name = forms.CharField(max_length=255, label='Имя')
     description = forms.CharField(
         label='Описание', required=False,
-        widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Описание'})
-        )
-    status = forms.ModelChoiceField(queryset=Status.objects.all(), label='Статус')
-    executor = forms.ModelChoiceField(queryset=User.objects.all(), label='Исполнитель', required=False)
-    labels = forms.ModelMultipleChoiceField(queryset=Label.objects.all(), label='Метки', required=False)
+        widget=forms.Textarea(attrs={
+            'class': 'form-control', 'placeholder': 'Описание'
+            })
+    )
+    status = forms.ModelChoiceField(
+        queryset=Status.objects.all(), label='Статус'
+    )
+    executor = forms.ModelChoiceField(
+        queryset=User.objects.all(), label='Исполнитель', required=False
+    )
+    labels = forms.ModelMultipleChoiceField(
+        queryset=Label.objects.all(), label='Метки', required=False
+    )
     date_joined = DateTimeField(auto_now_add=True)
 
     User.__str__ = lambda self: f'{self.first_name} {self.last_name}'
