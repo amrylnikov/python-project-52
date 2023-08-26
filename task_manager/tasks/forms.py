@@ -13,7 +13,7 @@ class CreateTaskForm(forms.ModelForm):
         label='Описание', required=False,
         widget=forms.Textarea(attrs={
             'class': 'form-control', 'placeholder': 'Описание'
-            })
+        })
     )
     status = forms.ModelChoiceField(
         queryset=Status.objects.all(), label='Статус'
