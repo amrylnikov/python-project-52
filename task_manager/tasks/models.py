@@ -11,7 +11,7 @@ class Task(models.Model):
     description = models.CharField(max_length=255)
     status = models.ForeignKey(Status, on_delete=models.RESTRICT, related_name='tasks')
     author = models.ForeignKey(User, on_delete=models.RESTRICT, related_name='tasks_authored')
-    worker = models.ForeignKey(User, on_delete=models.RESTRICT, related_name='tasks_assigned', null=True)
+    executor = models.ForeignKey(User, on_delete=models.RESTRICT, related_name='tasks_assigned', null=True)
     labels = models.ManyToManyField(Label)
     date_joined = DateTimeField(auto_now_add=True)
 
