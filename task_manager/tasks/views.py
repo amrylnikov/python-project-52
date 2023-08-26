@@ -32,9 +32,10 @@ class TaskCreate(CustomLoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = CreateTaskForm
     template_name = 'tasks/create.html'
     success_url = reverse_lazy('tasks')
-    success_message = "Задачи успешно создана!"
+    success_message = "Задача успешно создана"
 
     def form_valid(self, form):
+        form.instance.author = self.request.user
         response = super().form_valid(form)
         return response
 

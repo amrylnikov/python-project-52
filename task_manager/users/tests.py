@@ -21,6 +21,10 @@ class UserRegisterTest(TestCase):
             'username': self.form_data['username'],
             'password': self.form_data['password1'],
         }
+        # создай пользователя тут и залогинь self.user и таскай его
+        # в логине и регистрации отдельно
+        # self.client.login(username="fred", password="secret")
+
 
     def test_registration(self):
         response = self.client.post(self.register_url, self.form_data)
@@ -41,9 +45,11 @@ class UserRegisterTest(TestCase):
         self.client.post(self.register_url, self.form_data)
         self.user = User.objects.get(username='testuser')
 
+        self.client.post(self.login_url, self.login_data)  # переделай на login
+
         response = self.client.get(self.edit_url)
 
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)  # редирект не вернёт шаблон
         self.assertTemplateUsed(response, 'user_update.html')
 
         new_form_data = {

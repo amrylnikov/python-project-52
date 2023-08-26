@@ -8,7 +8,7 @@ class TaskFilter(django_filters.FilterSet):
 
     class Meta:
         model = Task
-        fields = ['author', 'worker', 'labels']
+        fields = ['status', 'worker', 'labels']
 
     def my_custom_filter(self, queryset, name, value):
         return queryset.filter(**{
