@@ -1,0 +1,4 @@
+task_manager/.env
+__pycache__/
+*.bak
+dist/
