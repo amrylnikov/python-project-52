@@ -27,10 +27,7 @@ class UserRegisterTest(TestCase):
             last_name='last_name',
             password='password',
         )
-        self.client.login(username=self.user.username, password=self.user.password)
-        # создай пользователя тут и залогинь self.user и таскай его
-        # в логине и регистрации отдельно
-        # self.client.login(username="fred", password="secret")
+        self.client.login(username='username', password='password')
 
     def test_registration(self):
         response = self.client.post(self.register_url, self.form_data)
@@ -48,11 +45,8 @@ class UserRegisterTest(TestCase):
         self.assertEqual(response.url, '/')
 
     def test_edit_user(self):
-        self.client.post(self.register_url, self.form_data)
-
-        self.client.post(self.login_url, self.login_data)
-
         response = self.client.get(self.edit_url)
+
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_update.html')
 
@@ -74,11 +68,6 @@ class UserRegisterTest(TestCase):
         self.assertEqual(self.user.first_name, 'User')
 
     def test_delete_user(self):
-        self.client.post(self.register_url, self.form_data)
-        # self.user = User.objects.get(username='testuser')
-
-        self.client.post(self.login_url, self.login_data)
-
         response = self.client.get(self.delete_url)
 
         self.assertEqual(response.status_code, 200)
