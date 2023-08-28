@@ -21,6 +21,13 @@ class UserRegisterTest(TestCase):
             'username': self.form_data['username'],
             'password': self.form_data['password1'],
         }
+        self.user = User.objects.create_user(
+            username='username',
+            first_name='first_name',
+            last_name='last_name',
+            password='password',
+        )
+        self.client.login(username=self.user.username, password=self.user.password)
         # создай пользователя тут и залогинь self.user и таскай его
         # в логине и регистрации отдельно
         # self.client.login(username="fred", password="secret")
@@ -30,7 +37,7 @@ class UserRegisterTest(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, self.login_url)
-        self.assertEqual(User.objects.count(), 1)
+        self.assertEqual(User.objects.count(), 2)
 
     def test_login(self):
         self.client.post(self.register_url, self.form_data)
@@ -42,13 +49,11 @@ class UserRegisterTest(TestCase):
 
     def test_edit_user(self):
         self.client.post(self.register_url, self.form_data)
-        self.user = User.objects.get(username='testuser')
 
-        self.client.post(self.login_url, self.login_data)  # переделай на login
+        self.client.post(self.login_url, self.login_data)
 
         response = self.client.get(self.edit_url)
-
-        self.assertEqual(response.status_code, 200)  # редиректне вернёт шаблон
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_update.html')
 
         new_form_data = {
@@ -70,11 +75,13 @@ class UserRegisterTest(TestCase):
 
     def test_delete_user(self):
         self.client.post(self.register_url, self.form_data)
-        self.user = User.objects.get(username='testuser')
+        # self.user = User.objects.get(username='testuser')
+
+        self.client.post(self.login_url, self.login_data)
 
         response = self.client.get(self.delete_url)
 
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'auth/user_confirm_delete.html')
 
         response = self.client.post(self.delete_url)

@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django_filters.views import FilterView
 
 from task_manager.tasks.forms import CreateTaskForm
 from task_manager.tasks.models import Task
