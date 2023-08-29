@@ -43,7 +43,6 @@ class TaskShow(CustomLoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
         tasks = task_filter.qs
-
         if request.GET.get('self_tasks'):
             tasks = task_filter.qs.filter(author=request.user)
 
