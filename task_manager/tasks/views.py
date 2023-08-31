@@ -1,7 +1,6 @@
-from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.utils.translation import gettext as _
@@ -10,12 +9,6 @@ from task_manager.tasks.forms import CreateTaskForm
 from task_manager.tasks.models import Task
 from task_manager.tasks.filters import TaskFilter
 from task_manager.mixins import SpecifiedLoginRequiredMixin
-
-
-class IndexView(View):
-
-    def get(self, request, *args, **kwargs):
-        return render(request, 'index.html')
 
 
 class TaskGetInfo(SpecifiedLoginRequiredMixin, View):
@@ -44,8 +37,6 @@ class TaskShow(SpecifiedLoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
         tasks = task_filter.qs
-        for task in tasks:
-            print(task.labels.all())
         if request.GET.get('self_tasks'):
             tasks = task_filter.qs.filter(author=request.user)
 
@@ -59,21 +50,15 @@ class TaskEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Task
     template_name = 'tasks/update.html'
     form_class = CreateTaskForm
+    success_url = reverse_lazy('tasks')
     success_message = _("Задача успешно изменена")
-
-    def get_success_url(self):
-        return reverse('tasks')
 
 
 class TaskDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Task
     template_name = 'auth/task_confirm_delete.html'
     success_url = reverse_lazy('tasks')
+    success_message = _("Задача успешно удалена")
 
-    def form_valid(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.delete()
-        messages.success(self.request, _("Задача успешно удалена"))
-        return redirect(self.success_url)
 
-# Удалять задачи может их создатель
+# TODO Удалять задачи может их создатель

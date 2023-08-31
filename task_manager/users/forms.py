@@ -1,6 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.db.models import DateTimeField
 from django import forms
 
 
@@ -23,7 +22,6 @@ class RegisterUserForm(UserCreationForm):
         label='Подтверждение пароля',
         help_text='Для подтверждения введите, пожалуйста, пароль ещё раз.'
     )
-    # date_joined = DateTimeField(auto_now_add=True)
 
     class Meta:
         model = User
