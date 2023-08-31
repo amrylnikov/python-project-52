@@ -27,3 +27,4 @@ class RegisterUserForm(UserCreationForm):
         model = User
         fields = ('first_name', 'last_name', 'username', 'password1',
                   'password2')
+

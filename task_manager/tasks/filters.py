@@ -15,7 +15,7 @@ class TaskFilter(django_filters.FilterSet):
         model = Task
         fields = ['status', 'executor', 'labels']
 
-    def my_custom_filter(self, queryset, name, value):
+    def filter_tasks(self, queryset, name, value):
         return queryset.filter(**{
             name: value,
         })

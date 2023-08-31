@@ -24,7 +24,7 @@ class CreateTaskForm(forms.ModelForm):
     labels = forms.ModelMultipleChoiceField(
         queryset=Label.objects.all(), label='Метки', required=False
     )
-    date_joined = DateTimeField(auto_now_add=True)
+    creation_date = DateTimeField(auto_now_add=True)
 
     User.__str__ = lambda self: f'{self.first_name} {self.last_name}'
 

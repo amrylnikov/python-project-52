@@ -8,19 +8,6 @@ class UserRegisterTest(TestCase):
         self.client = Client()
         self.register_url = reverse('registration')
         self.login_url = reverse('login')
-        self.form_data = {
-            'username': 'testuser',
-            'first_name': 'Test',
-            'last_name': 'User',
-            'password1': 'testpassword',
-            'password2': 'testpassword',
-        }
-        self.edit_url = reverse('edit', args=[1])
-        self.delete_url = reverse('delete', args=[1])
-        self.login_data = {
-            'username': self.form_data['username'],
-            'password': self.form_data['password1'],
-        }
         self.user = User.objects.create_user(
             username='username',
             first_name='first_name',
@@ -30,22 +17,40 @@ class UserRegisterTest(TestCase):
         self.client.login(username='username', password='password')
 
     def test_registration(self):
-        response = self.client.post(self.register_url, self.form_data)
+        form_data = {
+            'username': 'testuser',
+            'first_name': 'Test',
+            'last_name': 'User',
+            'password1': 'testpassword',
+            'password2': 'testpassword',
+        }
+
+        response = self.client.post(self.register_url, form_data)
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, self.login_url)
-        self.assertEqual(User.objects.count(), 2)
+
+        new_user = User.objects.get(pk=2)
+
+        self.assertEqual(new_user.username, 'testuser')
+        self.assertEqual(new_user.first_name, 'Test')
+        self.assertEqual(new_user.last_name, 'User')
 
     def test_login(self):
-        self.client.post(self.register_url, self.form_data)
+        login_data = {
+            'username': 'username',
+            'password': 'password',
+        }
 
-        response = self.client.post(self.login_url, self.login_data)
+        response = self.client.post(self.login_url, login_data)
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/')
 
     def test_edit_user(self):
-        response = self.client.get(self.edit_url)
+        edit_url = reverse('edit', args=[1])
+
+        response = self.client.get(edit_url)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_update.html')
@@ -58,7 +63,7 @@ class UserRegisterTest(TestCase):
             'password2': 'testpassword1',
         }
 
-        response = self.client.post(self.edit_url, new_form_data)
+        response = self.client.post(edit_url, new_form_data)
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('users'))
@@ -66,14 +71,17 @@ class UserRegisterTest(TestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.username, 'Updated')
         self.assertEqual(self.user.first_name, 'User')
+        self.assertEqual(self.user.last_name, 'qwerqwer')
 
     def test_delete_user(self):
-        response = self.client.get(self.delete_url)
+        delete_url = reverse('delete', args=[1])
+
+        response = self.client.get(delete_url)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'auth/user_confirm_delete.html')
 
-        response = self.client.post(self.delete_url)
+        response = self.client.post(delete_url)
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('users'))

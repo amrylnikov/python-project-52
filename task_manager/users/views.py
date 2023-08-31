@@ -28,7 +28,10 @@ class UserEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('users')
     form_class = RegisterUserForm
     success_message = _("Пользователь успешно изменен!")
-
+    
+    def get_object(self, queryset=None):
+        # Retrieve the object to be edited based on the current user's ID
+        return self.request.user
 
 class UserDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = User
