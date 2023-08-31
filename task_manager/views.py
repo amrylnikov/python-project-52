@@ -23,9 +23,10 @@ class UserLogin(LoginView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, _('''Пожалуйста, введите правильные имя
-                                        пользователя и пароль. Оба поля могут
-                                        быть чувствительны к регистру.'''))
+        messages.error(self.request, _(
+            'Пожалуйста, введите правильные имя пользователя и пароль. '
+            'Оба поля могут быть чувствительны к регистру.'
+        ))
         return super().form_invalid(form)
 
 
@@ -34,8 +35,9 @@ class UserLogout(LoginRequiredMixin, View):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request,
-                           _('Вы не авторизованы! Пожалуйста, выполните вход.'))
+            messages.error(request, _(
+                'Вы не авторизованы! Пожалуйста, выполните вход.'
+            ))
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
