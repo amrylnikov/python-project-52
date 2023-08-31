@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth import logout
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
 from django.utils.translation import gettext as _
 from django.views import View
+
+from task_manager.mixins import SpecifiedLoginRequiredMixin
 
 
 class IndexView(View):
@@ -30,17 +30,9 @@ class UserLogin(LoginView):
         return super().form_invalid(form)
 
 
-class UserLogout(LoginRequiredMixin, View):
-    login_url = 'login'
+class UserLogout(SpecifiedLoginRequiredMixin, LogoutView):
+    next_page = reverse_lazy('index')
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, _(
-                'Вы не авторизованы! Пожалуйста, выполните вход.'
-            ))
-        return super().dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        logout(request)
         messages.info(request, _("Вы разлогинены"))
-        return redirect('index')
+        return super().dispatch(request, *args, **kwargs)
