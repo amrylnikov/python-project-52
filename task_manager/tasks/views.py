@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic import DetailView
 from django.utils.translation import gettext as _
 
 from task_manager.tasks.forms import CreateTaskForm
@@ -11,13 +12,10 @@ from task_manager.tasks.filters import TaskFilter
 from task_manager.mixins import SpecifiedLoginRequiredMixin
 
 
-class TaskGetInfo(SpecifiedLoginRequiredMixin, View):
-
-    def get(self, request, *args, **kwargs):
-        task_id = kwargs.get('pk')
-        task = Task.objects.get(id=task_id)
-        form = CreateTaskForm(instance=task)
-        return render(request, 'tasks/task.html', {'form': form, 'task': task})
+class TaskGetInfo(SpecifiedLoginRequiredMixin, DetailView):
+    template_name = 'tasks/task.html'
+    model = Task
+    context_object_name = 'task'
 
 
 class TaskCreate(SpecifiedLoginRequiredMixin, SuccessMessageMixin, CreateView):
