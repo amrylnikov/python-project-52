@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.translation import gettext as _
 from django.views import View
 
 
@@ -21,13 +22,13 @@ class UserLogin(LoginView):
 
     def form_valid(self, form):
         login(self.request, form.get_user())
-        messages.success(self.request, "Вы залогинены")
+        messages.success(self.request, _("Вы залогинены"))
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, '''Пожалуйста, введите правильные имя
+        messages.error(self.request, _('''Пожалуйста, введите правильные имя
                                         пользователя и пароль. Оба поля могут
-                                        быть чувствительны к регистру.''')
+                                        быть чувствительны к регистру.'''))
         return super().form_invalid(form)
 
 
@@ -37,10 +38,10 @@ class UserLogout(LoginRequiredMixin, View):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request,
-                           'Вы не авторизованы! Пожалуйста, выполните вход.')
+                           _('Вы не авторизованы! Пожалуйста, выполните вход.'))
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         logout(request)
-        messages.info(request, ("Вы разлогинены"))
+        messages.info(request, _("Вы разлогинены"))
         return redirect('index')

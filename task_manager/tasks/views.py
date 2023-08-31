@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.utils.translation import gettext as _
 
 from task_manager.tasks.forms import CreateTaskForm
 from task_manager.tasks.models import Task
@@ -30,7 +31,7 @@ class TaskCreate(CustomLoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = CreateTaskForm
     template_name = 'tasks/create.html'
     success_url = reverse_lazy('tasks')
-    success_message = "Задача успешно создана"
+    success_message = _("Задача успешно создана")
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -43,6 +44,8 @@ class TaskShow(CustomLoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
         tasks = task_filter.qs
+        for task in tasks:
+            print(task.labels.all())
         if request.GET.get('self_tasks'):
             tasks = task_filter.qs.filter(author=request.user)
 
@@ -56,7 +59,7 @@ class TaskEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Task
     template_name = 'tasks/update.html'
     form_class = CreateTaskForm
-    success_message = "Задача успешно изменена"
+    success_message = _("Задача успешно изменена")
 
     def get_success_url(self):
         return reverse('tasks')
@@ -70,7 +73,7 @@ class TaskDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     def form_valid(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
-        messages.success(self.request, "Задача успешно удалена")
+        messages.success(self.request, _("Задача успешно удалена"))
         return redirect(self.success_url)
 
 # Удалять задачи может их создатель

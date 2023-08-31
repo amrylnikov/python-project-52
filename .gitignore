@@ -2,3 +2,4 @@ task_manager/.env
 __pycache__/
 *.bak
 dist/
+db.sqlite3

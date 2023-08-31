@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.utils.translation import gettext as _
 
 from task_manager.users.forms import RegisterUserForm
 from task_manager.mixins import CustomLoginRequiredMixin
@@ -14,7 +15,7 @@ class UserRegister(SuccessMessageMixin, CreateView):
     form_class = RegisterUserForm
     template_name = 'registration.html'
     success_url = reverse_lazy('login')
-    success_message = "Пользователь успешно зарегистрирован"
+    success_message = _("Пользователь успешно зарегистрирован")
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -39,7 +40,7 @@ class UserEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = User
     template_name = 'user_update.html'
     form_class = RegisterUserForm
-    success_message = "Пользователь успешно изменен!"
+    success_message = _("Пользователь успешно изменен!")
 
     def get_success_url(self):
         return reverse('users')
@@ -53,7 +54,7 @@ class UserDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     def form_valid(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
-        messages.success(self.request, "Пользователь успешно удален")
+        messages.success(self.request, _("Пользователь успешно удален"))
         return redirect(self.success_url)
 
 # TODO В логине исправить сообщения в html, щас там только опасности.
