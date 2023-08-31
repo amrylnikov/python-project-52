@@ -8,10 +8,10 @@ from django.utils.translation import gettext as _
 
 from task_manager.statuses.forms import CreateStatusForm
 from task_manager.statuses.models import Status
-from task_manager.mixins import CustomLoginRequiredMixin
+from task_manager.mixins import SpecifiedLoginRequiredMixin
 
 
-class StatusCreate(CustomLoginRequiredMixin, SuccessMessageMixin, CreateView):
+class StatusCreate(SpecifiedLoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = CreateStatusForm
     template_name = 'statuses/create.html'
     success_url = reverse_lazy('statuses')
@@ -22,7 +22,7 @@ class StatusCreate(CustomLoginRequiredMixin, SuccessMessageMixin, CreateView):
         return response
 
 
-class StatusShow(CustomLoginRequiredMixin, View):
+class StatusShow(SpecifiedLoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         statuses = Status.objects.all()
@@ -31,7 +31,7 @@ class StatusShow(CustomLoginRequiredMixin, View):
         })
 
 
-class StatusEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class StatusEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Status
     template_name = 'statuses/update.html'
     form_class = CreateStatusForm
@@ -41,7 +41,7 @@ class StatusEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return reverse('statuses')
 
 
-class StatusDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class StatusDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Status
     template_name = 'auth/status_confirm_delete.html'
     success_url = reverse_lazy('statuses')

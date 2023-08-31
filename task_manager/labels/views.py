@@ -8,10 +8,10 @@ from django.utils.translation import gettext as _
 
 from task_manager.labels.forms import CreateLabelForm
 from task_manager.labels.models import Label
-from task_manager.mixins import CustomLoginRequiredMixin
+from task_manager.mixins import SpecifiedLoginRequiredMixin
 
 
-class LabelCreate(CustomLoginRequiredMixin, SuccessMessageMixin, CreateView):
+class LabelCreate(SpecifiedLoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = CreateLabelForm
     template_name = 'labels/create.html'
     success_url = reverse_lazy('labels')
@@ -22,7 +22,7 @@ class LabelCreate(CustomLoginRequiredMixin, SuccessMessageMixin, CreateView):
         return response
 
 
-class LabelShow(CustomLoginRequiredMixin, View):
+class LabelShow(SpecifiedLoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         labels = Label.objects.all()
@@ -31,7 +31,7 @@ class LabelShow(CustomLoginRequiredMixin, View):
         })
 
 
-class LabelEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class LabelEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Label
     template_name = 'labels/update.html'
     form_class = CreateLabelForm
@@ -41,7 +41,7 @@ class LabelEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return reverse('labels')
 
 
-class LabelDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class LabelDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Label
     template_name = 'auth/label_confirm_delete.html'
     success_url = reverse_lazy('labels')

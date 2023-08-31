@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.utils.translation import gettext as _
 
 from task_manager.users.forms import RegisterUserForm
-from task_manager.mixins import CustomLoginRequiredMixin
+from task_manager.mixins import SpecifiedLoginRequiredMixin
 
 
 class UserRegister(SuccessMessageMixin, CreateView):
@@ -36,7 +36,7 @@ class UsersShow(View):
         })
 
 
-class UserEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class UserEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = User
     template_name = 'user_update.html'
     form_class = RegisterUserForm
@@ -46,7 +46,7 @@ class UserEdit(CustomLoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return reverse('users')
 
 
-class UserDelete(CustomLoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class UserDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = User
     template_name = 'auth/user_confirm_delete.html'
     success_url = reverse_lazy('users')

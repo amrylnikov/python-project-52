@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth import login, logout
+from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
@@ -16,12 +16,9 @@ class IndexView(View):
 
 class UserLogin(LoginView):
     template_name = 'login.html'
-
-    def get_success_url(self):
-        return reverse_lazy('index')
+    next_page = reverse_lazy('index')
 
     def form_valid(self, form):
-        login(self.request, form.get_user())
         messages.success(self.request, _("Вы залогинены"))
         return super().form_valid(form)
 
