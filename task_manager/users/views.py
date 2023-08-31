@@ -1,10 +1,8 @@
-from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views import View
+from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.list import ListView
 from django.utils.translation import gettext as _
 
 from task_manager.users.forms import RegisterUserForm
@@ -17,49 +15,26 @@ class UserRegister(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('login')
     success_message = _("Пользователь успешно зарегистрирован")
 
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        return response
 
-    # Для ошибок пароля. Удалить при проверке
-    # def form_invalid(self, form):
-    #     messages.error(self.request, form.errors)
-    #     return super().form_invalid(form)
-
-
-class UsersShow(View):
-
-    def get(self, request, *args, **kwargs):
-        users = User.objects.all()
-        return render(request, 'users.html', {
-            'users': users,
-        })
+class UsersShow(ListView):
+    model = User
+    template_name = 'users.html'
+    paginate_by = 100
 
 
 class UserEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = User
     template_name = 'user_update.html'
+    success_url = reverse_lazy('users')
     form_class = RegisterUserForm
     success_message = _("Пользователь успешно изменен!")
-
-    def get_success_url(self):
-        return reverse('users')
 
 
 class UserDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = User
     template_name = 'auth/user_confirm_delete.html'
     success_url = reverse_lazy('users')
-
-    def form_valid(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.delete()
-        messages.success(self.request, _("Пользователь успешно удален"))
-        return redirect(self.success_url)
+    success_message = _("Пользователь успешно удален")
 
 # TODO В логине исправить сообщения в html, щас там только опасности.
-# TODO Проверить в html что на нужных страницах проверяется, залогиген ли юзер
-# (если ты в браузере ссылку на изменение вобьёшь например)
-# А как? Надо ж редирект делать, но проверить я могу только в html i guess?
-# Нельзя удалить пользователя если он связан с задачами. И метки тжс. Как?
 # TODO Как обработать ошибку, что возникает при попытке удаления?
