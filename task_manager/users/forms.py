@@ -23,7 +23,7 @@ class RegisterUserForm(UserCreationForm):
         label='Подтверждение пароля',
         help_text='Для подтверждения введите, пожалуйста, пароль ещё раз.'
     )
-    date_joined = DateTimeField(auto_now_add=True)
+    # date_joined = DateTimeField(auto_now_add=True)
 
     class Meta:
         model = User
