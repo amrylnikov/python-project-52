@@ -28,16 +28,14 @@ class UserEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('users')
     form_class = RegisterUserForm
     success_message = _("Пользователь успешно изменен!")
-    
-    def get_object(self, queryset=None):
-        # Retrieve the object to be edited based on the current user's ID
-        return self.request.user
+
 
 class UserDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = User
     template_name = 'auth/user_confirm_delete.html'
     success_url = reverse_lazy('users')
     success_message = _("Пользователь успешно удален")
+
 
 # TODO В логине исправить сообщения в html, щас там только опасности.
 # TODO Как обработать ошибку, что возникает при попытке удаления?

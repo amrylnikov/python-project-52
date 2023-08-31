@@ -9,7 +9,8 @@ from task_manager.statuses.models import Status
 from task_manager.mixins import SpecifiedLoginRequiredMixin
 
 
-class StatusCreate(SpecifiedLoginRequiredMixin, SuccessMessageMixin, CreateView):
+class StatusCreate(SpecifiedLoginRequiredMixin, SuccessMessageMixin,
+                   CreateView):
     form_class = CreateStatusForm
     template_name = 'statuses/create.html'
     success_url = reverse_lazy('statuses')
@@ -34,7 +35,8 @@ class StatusEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = _("Статус успешно изменен")
 
 
-class StatusDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class StatusDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin,
+                   DeleteView):
     model = Status
     template_name = 'auth/status_confirm_delete.html'
     success_url = reverse_lazy('statuses')
