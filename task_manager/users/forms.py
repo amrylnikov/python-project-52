@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 from task_manager.users.models import Correctly_Displayed_User
 
+
 class RegisterUserForm(UserCreationForm):
 
     class Meta:

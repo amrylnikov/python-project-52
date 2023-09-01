@@ -1,10 +1,10 @@
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic import DetailView
 from django.utils.translation import gettext as _
+from django_filters.views import FilterView
+from django.views.generic.list import ListView
 
 from task_manager.tasks.forms import CreateTaskForm
 from task_manager.tasks.models import Task
@@ -30,18 +30,23 @@ class TaskCreate(VerboseLoginRequiredMixin, SuccessMessageMixin, CreateView):
         return response
 
 
-class TaskShow(VerboseLoginRequiredMixin, View):
+class TaskShow(VerboseLoginRequiredMixin, FilterView, ListView):
+    model = Task
+    filterset_class = TaskFilter
+    template_name = 'tasks/tasks.html'
+    context_object_name = 'tasks'
+    paginate_by = 100
 
-    def get(self, request, *args, **kwargs):
-        task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
-        tasks = task_filter.qs
-        if request.GET.get('self_tasks'):
-            tasks = task_filter.qs.filter(author=request.user)
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.GET.get('self_tasks'):
+            queryset = queryset.filter(author=self.request.user)
+        return queryset
 
-        return render(request, 'tasks/tasks.html', {
-            'form': task_filter.form,
-            'tasks': tasks,
-        })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.filterset.form
+        return context
 
 
 class TaskEdit(VerboseLoginRequiredMixin, SuccessMessageMixin, UpdateView):
