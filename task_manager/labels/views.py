@@ -6,10 +6,10 @@ from django.views.generic.list import ListView
 
 from task_manager.labels.forms import CreateLabelForm
 from task_manager.labels.models import Label
-from task_manager.mixins import SpecifiedLoginRequiredMixin
+from task_manager.mixins import VerboseLoginRequiredMixin
 
 
-class LabelCreate(SpecifiedLoginRequiredMixin, SuccessMessageMixin, CreateView):
+class LabelCreate(VerboseLoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = CreateLabelForm
     template_name = 'labels/create.html'
     success_url = reverse_lazy('labels')
@@ -20,13 +20,13 @@ class LabelCreate(SpecifiedLoginRequiredMixin, SuccessMessageMixin, CreateView):
         return response
 
 
-class LabelShow(SpecifiedLoginRequiredMixin, ListView):
+class LabelShow(VerboseLoginRequiredMixin, ListView):
     model = Label
     template_name = 'labels/labels.html'
     paginate_by = 100
 
 
-class LabelEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class LabelEdit(VerboseLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Label
     template_name = 'labels/update.html'
     form_class = CreateLabelForm
@@ -34,7 +34,7 @@ class LabelEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = _("Метка успешно изменена")
 
 
-class LabelDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class LabelDelete(VerboseLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Label
     template_name = 'auth/label_confirm_delete.html'
     success_url = reverse_lazy('labels')

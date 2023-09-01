@@ -2,17 +2,15 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
 from django.utils.translation import gettext as _
+from django.contrib.messages.views import SuccessMessageMixin
 
-from task_manager.mixins import SpecifiedLoginRequiredMixin
+from task_manager.mixins import VerboseLoginRequiredMixin
 
 
-class UserLogin(LoginView):
+class UserLogin(SuccessMessageMixin, LoginView):
     template_name = 'login.html'
     next_page = reverse_lazy('index')
-
-    def form_valid(self, form):
-        messages.success(self.request, _("Вы залогинены"))
-        return super().form_valid(form)
+    success_message = _("Вы залогинены")
 
     def form_invalid(self, form):
         messages.error(self.request, _(
@@ -22,7 +20,7 @@ class UserLogin(LoginView):
         return super().form_invalid(form)
 
 
-class UserLogout(SpecifiedLoginRequiredMixin, LogoutView):
+class UserLogout(VerboseLoginRequiredMixin, LogoutView):
     next_page = reverse_lazy('index')
 
     def dispatch(self, request, *args, **kwargs):

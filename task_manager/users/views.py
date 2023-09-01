@@ -6,7 +6,7 @@ from django.views.generic.list import ListView
 from django.utils.translation import gettext as _
 
 from task_manager.users.forms import RegisterUserForm
-from task_manager.mixins import SpecifiedLoginRequiredMixin
+from task_manager.mixins import VerboseLoginRequiredMixin
 
 
 class UserRegister(SuccessMessageMixin, CreateView):
@@ -22,7 +22,7 @@ class UsersShow(ListView):
     paginate_by = 100
 
 
-class UserEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class UserEdit(VerboseLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = User
     template_name = 'user_update.html'
     success_url = reverse_lazy('users')
@@ -30,7 +30,7 @@ class UserEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = _("Пользователь успешно изменен!")
 
 
-class UserDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class UserDelete(VerboseLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = User
     template_name = 'auth/user_confirm_delete.html'
     success_url = reverse_lazy('users')

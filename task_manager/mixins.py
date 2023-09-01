@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
 
 
-class SpecifiedLoginRequiredMixin(LoginRequiredMixin):
+class VerboseLoginRequiredMixin(LoginRequiredMixin):
 
     login_url = 'login'
     permission_denied_message = _(

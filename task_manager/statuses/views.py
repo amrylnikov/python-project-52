@@ -6,10 +6,10 @@ from django.utils.translation import gettext as _
 
 from task_manager.statuses.forms import CreateStatusForm
 from task_manager.statuses.models import Status
-from task_manager.mixins import SpecifiedLoginRequiredMixin
+from task_manager.mixins import VerboseLoginRequiredMixin
 
 
-class StatusCreate(SpecifiedLoginRequiredMixin, SuccessMessageMixin,
+class StatusCreate(VerboseLoginRequiredMixin, SuccessMessageMixin,
                    CreateView):
     form_class = CreateStatusForm
     template_name = 'statuses/create.html'
@@ -21,13 +21,13 @@ class StatusCreate(SpecifiedLoginRequiredMixin, SuccessMessageMixin,
         return response
 
 
-class StatusShow(SpecifiedLoginRequiredMixin, ListView):
+class StatusShow(VerboseLoginRequiredMixin, ListView):
     model = Status
     template_name = 'statuses/statuses.html'
     paginate_by = 100
 
 
-class StatusEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class StatusEdit(VerboseLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Status
     template_name = 'statuses/update.html'
     form_class = CreateStatusForm
@@ -35,7 +35,7 @@ class StatusEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = _("Статус успешно изменен")
 
 
-class StatusDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin,
+class StatusDelete(VerboseLoginRequiredMixin, SuccessMessageMixin,
                    DeleteView):
     model = Status
     template_name = 'auth/status_confirm_delete.html'

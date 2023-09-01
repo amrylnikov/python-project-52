@@ -9,16 +9,16 @@ from django.utils.translation import gettext as _
 from task_manager.tasks.forms import CreateTaskForm
 from task_manager.tasks.models import Task
 from task_manager.tasks.filters import TaskFilter
-from task_manager.mixins import SpecifiedLoginRequiredMixin
+from task_manager.mixins import VerboseLoginRequiredMixin
 
 
-class TaskGetInfo(SpecifiedLoginRequiredMixin, DetailView):
+class TaskGetInfo(VerboseLoginRequiredMixin, DetailView):
     template_name = 'tasks/task.html'
     model = Task
     context_object_name = 'task'
 
 
-class TaskCreate(SpecifiedLoginRequiredMixin, SuccessMessageMixin, CreateView):
+class TaskCreate(VerboseLoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = CreateTaskForm
     template_name = 'tasks/create.html'
     success_url = reverse_lazy('tasks')
@@ -30,7 +30,7 @@ class TaskCreate(SpecifiedLoginRequiredMixin, SuccessMessageMixin, CreateView):
         return response
 
 
-class TaskShow(SpecifiedLoginRequiredMixin, View):
+class TaskShow(VerboseLoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
@@ -44,7 +44,7 @@ class TaskShow(SpecifiedLoginRequiredMixin, View):
         })
 
 
-class TaskEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class TaskEdit(VerboseLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Task
     template_name = 'tasks/update.html'
     form_class = CreateTaskForm
@@ -52,7 +52,7 @@ class TaskEdit(SpecifiedLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = _("Задача успешно изменена")
 
 
-class TaskDelete(SpecifiedLoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class TaskDelete(VerboseLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Task
     template_name = 'auth/task_confirm_delete.html'
     success_url = reverse_lazy('tasks')
