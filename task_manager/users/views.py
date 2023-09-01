@@ -1,4 +1,4 @@
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -8,7 +8,6 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 from task_manager.users.forms import RegisterUserForm
 from task_manager.mixins import VerboseLoginRequiredMixin
-from task_manager.users.models import Correctly_Displayed_User
 
 
 class UserRegister(SuccessMessageMixin, CreateView):
@@ -19,14 +18,14 @@ class UserRegister(SuccessMessageMixin, CreateView):
 
 
 class UsersShow(ListView):
-    model = Correctly_Displayed_User
+    model = User
     template_name = 'users.html'
     paginate_by = 100
 
 
 class UserEdit(VerboseLoginRequiredMixin, UserPassesTestMixin,
                SuccessMessageMixin, UpdateView):
-    model = Correctly_Displayed_User
+    model = User
     template_name = 'user_update.html'
     success_url = reverse_lazy('users')
     form_class = RegisterUserForm
@@ -39,7 +38,7 @@ class UserEdit(VerboseLoginRequiredMixin, UserPassesTestMixin,
 
 class UserDelete(VerboseLoginRequiredMixin, UserPassesTestMixin,
                  SuccessMessageMixin, DeleteView):
-    model = Correctly_Displayed_User
+    model = User
     template_name = 'auth/user_confirm_delete.html'
     success_url = reverse_lazy('users')
     success_message = _("Пользователь успешно удален")
