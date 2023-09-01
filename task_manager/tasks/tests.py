@@ -16,12 +16,6 @@ class TaskTest(TestCase):
             last_name='last_name',
             password='password',
         )
-        self.user_new = User.objects.create_user(
-            username='username_new',
-            first_name='first_name_new',
-            last_name='last_name',
-            password='password_new',
-        )
         self.client.login(username='username', password='password')
         self.status = Status.objects.create(name='status_name')
         self.label = Label.objects.create(name='label_name')
@@ -72,23 +66,6 @@ class TaskTest(TestCase):
         self.assertEqual(self.task.name, 'new name')
         self.assertEqual(self.task.description, 'new description')
 
-        create_url = reverse('create_task')
-        new_edit_url = reverse('edit_task', args=[2])
-
-        self.client.post(create_url, self.task_form_data)
-
-        login_data = {
-            'username': 'username_new',
-            'password': 'password_new',
-        }
-
-        login_url = reverse('login')
-        self.client.post(login_url, login_data)
-
-        response = self.client.post(new_edit_url)
-
-        self.assertEqual(response.status_code, 403)
-
     def test_delete_task(self):
         delete_url = reverse('delete_task', args=[1])
 
@@ -105,19 +82,30 @@ class TaskTest(TestCase):
         with self.assertRaises(Task.DoesNotExist):
             self.task.refresh_from_db()
 
+    def test_access_task(self):
         create_url = reverse('create_task')
-        new_delete_url = reverse('delete_task', args=[2])
+        edit_url = reverse('edit_task', args=[2])
+        delete_url = reverse('delete_task', args=[2])
 
         self.client.post(create_url, self.task_form_data)
 
+        User.objects.create_user(
+            username='username_new',
+            first_name='first_name_new',
+            last_name='last_name',
+            password='password_new',
+        )
         login_data = {
             'username': 'username_new',
             'password': 'password_new',
         }
-
         login_url = reverse('login')
         self.client.post(login_url, login_data)
 
-        response = self.client.post(new_delete_url)
+        response = self.client.post(edit_url)
+
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.post(delete_url)
 
         self.assertEqual(response.status_code, 403)
