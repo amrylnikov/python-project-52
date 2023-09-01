@@ -2,6 +2,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 
+# from task_manager.users.models import New_Display_User
+
 
 class RegisterUserForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, label='Имя')

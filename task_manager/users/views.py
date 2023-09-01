@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 from django.utils.translation import gettext as _
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from task_manager.users.forms import RegisterUserForm
 from task_manager.mixins import VerboseLoginRequiredMixin
@@ -22,20 +23,29 @@ class UsersShow(ListView):
     paginate_by = 100
 
 
-class UserEdit(VerboseLoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class UserEdit(VerboseLoginRequiredMixin, UserPassesTestMixin,
+               SuccessMessageMixin, UpdateView):
     model = User
     template_name = 'user_update.html'
     success_url = reverse_lazy('users')
     form_class = RegisterUserForm
     success_message = _("Пользователь успешно изменен!")
 
+    def test_func(self):
+        user = self.get_object()
+        return self.request.user == user
 
-class UserDelete(VerboseLoginRequiredMixin, SuccessMessageMixin, DeleteView):
+
+class UserDelete(VerboseLoginRequiredMixin, UserPassesTestMixin,
+                 SuccessMessageMixin, DeleteView):
     model = User
     template_name = 'auth/user_confirm_delete.html'
     success_url = reverse_lazy('users')
     success_message = _("Пользователь успешно удален")
 
+    def test_func(self):
+        user = self.get_object()
+        return self.request.user == user
 
 # TODO В логине исправить сообщения в html, щас там только опасности.
 # TODO Как обработать ошибку, что возникает при попытке удаления?
