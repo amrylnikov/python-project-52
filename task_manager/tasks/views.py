@@ -10,6 +10,7 @@ from task_manager.tasks.forms import CreateTaskForm
 from task_manager.tasks.models import Task
 from task_manager.tasks.filters import TaskFilter
 from task_manager.mixins import VerboseLoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 class TaskGetInfo(VerboseLoginRequiredMixin, DetailView):
@@ -49,19 +50,26 @@ class TaskShow(VerboseLoginRequiredMixin, FilterView, ListView):
         return context
 
 
-class TaskEdit(VerboseLoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class TaskEdit(VerboseLoginRequiredMixin, UserPassesTestMixin,
+               SuccessMessageMixin, UpdateView):
     model = Task
     template_name = 'tasks/update.html'
     form_class = CreateTaskForm
     success_url = reverse_lazy('tasks')
     success_message = _("Задача успешно изменена")
 
+    def test_func(self):
+        task = self.get_object()
+        return self.request.user == task.author
 
-class TaskDelete(VerboseLoginRequiredMixin, SuccessMessageMixin, DeleteView):
+
+class TaskDelete(VerboseLoginRequiredMixin, UserPassesTestMixin,
+                 SuccessMessageMixin, DeleteView):
     model = Task
     template_name = 'auth/task_confirm_delete.html'
     success_url = reverse_lazy('tasks')
     success_message = _("Задача успешно удалена")
 
-
-# TODO Удалять задачи может их создатель
+    def test_func(self):
+        task = self.get_object()
+        return self.request.user == task.author
