@@ -1,9 +1,10 @@
 from django.db import models
 from django.db.models import DateTimeField
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 
 from task_manager.statuses.models import Status
 from task_manager.labels.models import Label
+from task_manager.users.models import Correctly_Displayed_User
 
 
 class Task(models.Model):
@@ -13,10 +14,10 @@ class Task(models.Model):
         Status, on_delete=models.PROTECT, related_name='tasks'
     )
     author = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name='tasks_authored'
+        Correctly_Displayed_User, on_delete=models.PROTECT, related_name='tasks_authored'
     )
     executor = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name='tasks_assigned',
+        Correctly_Displayed_User, on_delete=models.PROTECT, related_name='tasks_assigned',
         null=True
     )
     labels = models.ManyToManyField(Label)

@@ -1,11 +1,11 @@
 from django import forms
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.db.models import DateTimeField
 
 from task_manager.statuses.models import Status
 from task_manager.tasks.models import Task
 from task_manager.labels.models import Label
-# from task_manager.users.models import Correctly_Displayed_User
+from task_manager.users.models import Correctly_Displayed_User
 
 
 class CreateTaskForm(forms.ModelForm):
@@ -20,7 +20,7 @@ class CreateTaskForm(forms.ModelForm):
         queryset=Status.objects.all(), label='Статус'
     )
     executor = forms.ModelChoiceField(
-        queryset=User.objects.all(), label='Исполнитель',
+        queryset=Correctly_Displayed_User.objects.all(), label='Исполнитель',
         required=False
     )
     labels = forms.ModelMultipleChoiceField(
@@ -28,7 +28,7 @@ class CreateTaskForm(forms.ModelForm):
     )
     creation_date = DateTimeField(auto_now_add=True)
 
-    User.__str__ = lambda self: f'{self.first_name} {self.last_name}'
+    # User.__str__ = lambda self: f'{self.first_name} {self.last_name}'
 
     class Meta:
         model = Task
