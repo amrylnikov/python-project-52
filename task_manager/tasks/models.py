@@ -4,7 +4,7 @@ from django.db.models import DateTimeField
 
 from task_manager.statuses.models import Status
 from task_manager.labels.models import Label
-from task_manager.users.models import Correctly_Displayed_User
+from task_manager.users.models import User
 
 
 class Task(models.Model):
@@ -14,10 +14,10 @@ class Task(models.Model):
         Status, on_delete=models.PROTECT, related_name='tasks'
     )
     author = models.ForeignKey(
-        Correctly_Displayed_User, on_delete=models.PROTECT, related_name='tasks_authored'
+        User, on_delete=models.PROTECT, related_name='tasks_authored'
     )
     executor = models.ForeignKey(
-        Correctly_Displayed_User, on_delete=models.PROTECT, related_name='tasks_assigned',
+        User, on_delete=models.PROTECT, related_name='tasks_assigned',
         null=True
     )
     labels = models.ManyToManyField(Label)
