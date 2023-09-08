@@ -1,4 +1,4 @@
-# Page Analyzer
+# Task Manager
 
 Task Manager – system for managing tasks. It allows you to create tasks, assign executers, labels, statuses and change them. To work with the system login and authentication are required.
 
